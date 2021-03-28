@@ -1,0 +1,21 @@
+logging:
+  version: 1
+  disable_existing_loggers: False
+  root:
+    level: INFO
+    handlers:
+      - console
+  handlers:
+    console:
+      class: logging.StreamHandler
+      level: DEBUG
+      formatter: default
+      stream: ext://sys.stdout
+      filters:
+        - requestid
+  filters:
+    requestid: { }
+  formatters:
+    default:
+      format: '[%(asctime)s.%(msecs)03dZ] | %(name)s | %(levelname)s - %(message)s | X-Request-ID: %(x_request_id)s'
+      datefmt: '%Y-%m-%dT%H:%M:%S'

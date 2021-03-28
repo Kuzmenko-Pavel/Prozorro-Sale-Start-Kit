@@ -1,0 +1,47 @@
+-i https://pypi-int.prozorro.sale/
+python-dotenv==0.15.0
+{%- if cookiecutter.use_yaml == 'y' %}
+PyYAML
+{%- endif %}
+aiohttp
+{%- if cookiecutter.use_swagger == 'y' %}
+aiohttp-swagger
+{%- endif %}
+{%- if cookiecutter.use_uvloop == 'y' %}
+uvloop==0.14.0
+{%- endif %}
+{%- if cookiecutter.use_mongo == 'y' %}
+motor==2.1.0
+{%- endif %}
+{%- if cookiecutter.use_orjson == 'y' %}
+orjson
+{%- endif %}
+{%- if cookiecutter.use_python_box == 'y' %}
+python-box
+{%- endif %}
+{%- if cookiecutter.use_trafaret == 'y' %}
+trafaret
+{%- endif %}
+{%- if cookiecutter.use_requests == 'y' %}
+requests
+{%- endif %}
+{%- if cookiecutter.use_schematics == 'y' %}
+schematics==3.2.9
+schematics_to_swagger>=1.4.7
+{%- endif %}
+{%- if cookiecutter.use_prozorro_tools == 'y' %}
+prozorro-tools==0.8.0
+{%- endif %}
+{%- if cookiecutter.use_prozorro_auth == 'y' %}
+prozorro-auth~=0.8
+{%- endif %}
+{%- if cookiecutter.use_prozorro_procedure == 'y' %}
+prozorro-procedure~=3.35
+{%- endif %}
+{%- if cookiecutter.use_prozorro_mirror == 'y' %}
+prozorro-mirror~=3.18
+{%- endif %}
+{%- if cookiecutter.use_prozorro_metrics == 'y' %}
+prozorro-metrics~=1.3.0
+{%- endif %}
+

@@ -1,0 +1,8 @@
+-r requirements.txt
+nose
+aiounittest
+coverage
+pytest
+pytest-aiohttp
+pytest-cov
+requests-mock

@@ -1,0 +1,65 @@
+dist: xenial
+language: python
+sudo: required
+
+services:
+  - docker
+
+python:
+  - '3.9'
+
+install:
+  - pip install --upgrade pip setuptools
+  - pip install -r requirements-dev.txt
+
+script:
+  - make flake
+  - make test
+
+before_script:
+  # Disable services enabled by default
+  # http://docs.travis-ci.com/user/database-setup/#MySQL
+  - sudo /etc/init.d/postgresql stop
+
+cache: pip
+
+jobs:
+  include:
+    - &deploy_job
+      stage: Upload a new version of python package to PYPI
+      name: Publishing current Git tagged version of dist to PyPI
+      if: repo == "Kuzmenko-Pavel/Prozorro-Sale-Start-Kit" AND tag IS present
+      install: []
+      script: skip
+
+      before_deploy:
+        - pip install --upgrade pep517
+        - python -m pep517.build --source --binary --out-dir dist .
+        - echo > setup.py
+
+      deploy: &deploy_step
+        provider: pypi
+        user: Prozorro-Sale-Start-Kit
+        skip-cleanup: true
+        password:
+          # Encrypted with `travis encrypt -r Kuzmenko-Pavel/Prozorro-Sale-Start-Kit --api-endpoint 'https://api.travis-ci.com/'`:
+          secure: "aWfMF4wG4upj2KZlQEwOwwQvWGonuUabPyKgU+LeAuRVvsHt1otqTy2sO4LYQrS4MWG9PxZ7TnUI1HrgER7MqfYUm8gUjvZY8d0U8kHEd48qd4CTwsaNj0PVy3vDfxY+KTgi0Sfre4WL6JMnuGvWieb6D1IsWNh4q0QbKdIq8Zr/TeIgzMG3vnvlvCBO5oohpxidPaoydb7AFCezkJWDmirX8y+Mj4QNBO4IZiRGUg2Gr2fgqqoRLUtmAV3ByQj8/dD6YbKJ6Rx1O6zOMuNnrJzMYenBjIeJr3u3cGILVi4JBvW0iKpjwxY/gFTQa3yFRF1RemgFgpG+SBp6BCiOEi0Tx9MVsuX8azpHq5c7hq9UHZHij8vLhZTwEOanC/BO7uafxGZwTHh+SgEXJfnPw1ruP/EreO/qBDP7Qxw+fk8aY69oGuUonEgwyzUYMS/YoqCR3fhty+YyRED7nZwB6rS0ZR1KTttKDno3o/gpMImDeq5cZCM+vXFuAjr3OcfhsOCuqfHaC2iRaEOhX5Ru9TTbyIqu4nSmpH+i7s0moouI3N8XkxlAfqqm7HMcBSRCRM6aheroKZnjdv+Ls7U3XMgE7Pl2/W6gWk939yQQxAL1pxu5nSxOVEY/D0lBQEaROu7HHBF2KIH2NM7i34Oq3jEjx4HaPgVSF8zhKMPRoaQ="
+        on:
+          all_branches: true
+
+    - <<: *deploy_job
+      name: >-
+        Publishing current (unstable) Git revision of dist to Test PyPI
+        on every push to master
+      env:
+        PYPI_UPLOAD: true
+      if: >-  # Always run, except if PR or cron
+        repo == "Kuzmenko-Pavel/Prozorro-Sale-Start-Kit" AND
+        branch == "main" AND
+        type == "push"
+      deploy:
+        <<: *deploy_step
+        server: https://test.pypi.org/legacy/
+        user: __token__
+        password:
+          secure: "iACHtwlhCmRtHWv6sKKejJXVgnQumMwqzwUD6sEGcDIc9LIo1qU5aFru7Asi9i4m0lsK9yNYQi/iBLVFb8ybYAEl05EOZE3SzBOIcXdPc4a7xnn0ucJeF9iQxpoOQypsio55bl+msaxUCOKDB4XOBsABTzXh6UC/4Z21iPkuY7aEiZ9V7pDfC1bkqpUL3vbfquNpM3JAHvwQvN1siUvgK3JZ3NHhGypFNjtuzuyEnc6Ri+C991HipBNE0RnW0LBMLD8nFX+8/PYNj1iuFuJ8Wfy4smGDTN85r1RFrutPrROWd3HB5QcCCV6dxvF4V0CqF4zgrjzxw3lAGsWiFs/Ydl24DTziZvrotIHrsV9Q+SO4B2J44ZY0on99bYAKYT/1aAX3YuajOMsW8piBtc7lD6hvOf360z5kaMKd1EJLOrlsiotwczn+lGe6vGxolMubbdzsfkmXTdoXQ+Sps43dzeoJwaFDQXBj6uBNyFbi78PwP3eutZjZKqcKBLF9xjf3CwS/QfqddWoTupIuG2QsSnY4AY9ezONHftOs2MVhasr1QM1m5jT3MtbtLDgWiASGb8WzKyxt6cyBs08M7c7sW6STQFfMMDiZHBrWYfSC9mvIBuENGdkU7EAOXlHphrRFLtVwdGo4BBnEdPKyfb9ZgfJas2izEYVUHVPdHlQuxMk="

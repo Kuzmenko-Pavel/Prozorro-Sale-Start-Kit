@@ -1,0 +1,111 @@
+{% raw -%}
+apiVersion: v1
+kind: Service
+metadata:
+  name: prozorro-dev-prozorro-sale-billing-demo
+  labels:
+    app.kubernetes.io/name: prozorro-sale-billing-demo
+    app.kubernetes.io/instance: prozorro-dev
+    app.kubernetes.io/version: "1.0"
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: prozorro-sale-billing-demo
+    app.kubernetes.io/instance: prozorro-dev
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prozorro-dev-prozorro-sale-billing-demo
+  labels:
+    app.kubernetes.io/name: prozorro-sale-billing-demo
+    app.kubernetes.io/instance: prozorro-dev
+    app.kubernetes.io/version: "1.0"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: prozorro-sale-billing-demo
+      app.kubernetes.io/instance: prozorro-dev
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: prozorro-sale-billing-demo
+        app.kubernetes.io/instance: prozorro-dev
+    spec:
+      imagePullSecrets:
+        - name: registry-gitlab
+      volumes:
+        - name: prozorro-dev-prozorro-sale-procedure-config
+          configMap:
+            name: prozorro-dev-prozorro-sale-procedure-config
+
+      containers:
+        - name: prozorro-sale-billing-demo
+          image: "registry-gitlab.prozorro.sale/prozorro-sale/billing:demo"
+          imagePullPolicy: Always
+          command: [ 'python', '-m', 'prozorro_sale.billing_service' ]
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /api/ping
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /api/ping
+              port: http
+          resources:
+            limits:
+              cpu: 1200m
+              memory: 512Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          env:
+            - name: SWAGGER_DOC
+              value: '1'
+            - name: SEARCH_URL
+              value: prozorro-dev-search-service
+          volumeMounts:
+            - name: prozorro-dev-prozorro-sale-procedure-config
+              mountPath: /config/
+
+
+
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: prozorro-dev-prozorro-sale-billing-demo
+  labels:
+    app.kubernetes.io/name: prozorro-sale-billing-demo
+    app.kubernetes.io/instance: prozorro-dev
+    app.kubernetes.io/version: "1.0"
+  annotations:
+    ingress.kubernetes.io/ssl-redirect: "true"
+    certmanager.k8s.io/cluster-issuer: "letsencrypt-clusterissuer"
+
+
+spec:
+  tls:
+    - hosts:
+        - "billing-dev-demo.prozori.in.ua"
+      secretName: billing-prozori-demo-tls
+  rules:
+    - host: "billing-dev-demo.prozori.in.ua"
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: prozorro-dev-prozorro-sale-billing-demo
+              servicePort: http
+{% endraw %}

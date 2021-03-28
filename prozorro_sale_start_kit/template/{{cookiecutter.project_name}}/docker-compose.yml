@@ -1,0 +1,42 @@
+version: '3.9'
+
+services:
+  billing-service-app: &base_app
+    image: "${IMAGE}"
+    container_name: billing-service
+    command: python -m prozorro_sale.billing_service
+    environment:
+      SWAGGER_DOC: 1
+      SEARCH_URL: procedure-dev.prozori.in.ua
+
+  billing-service-databridge:
+    <<: *base_app
+    container_name: billing-service-databridge
+    command: python -m prozorro_sale.billing_service.databridge
+
+  billing-service-test-integration: &test_app
+    <<: *base_app
+    image: "${IMAGE_TEST}"
+    environment:
+      SEARCH_URL: na
+
+  billing-service-test-unit:
+    <<: *test_app
+
+  billing-service-local:
+    <<: *base_app
+    tty: true
+    command: adev runserver prozorro_sale/billing_service
+    environment:
+      SEARCH_URL: procedure-dev.prozori.in.ua
+      DEBUG: 1
+      PYTHONUNBUFFERED: 1
+      PYTHONASYNCIODEBUG: 1
+      AIO_PORT: 8080
+      AIO_DEBUG_TOOLBAR: 1
+      AIO_LIVERELOAD: 1
+    volumes:
+      - ./src:/billing-service:delegated
+    restart: always
+    ports:
+      - 8080:8080
