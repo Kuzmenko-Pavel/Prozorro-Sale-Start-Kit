@@ -1,8 +1,8 @@
-PROJECT_NAME={{ cookiecutter.project_name }}
+PROJECT_NAME={{cookiecutter.project_name}}
 IMAGE ?= prozorro-sale-$(PROJECT_NAME):develop
 IMAGE_TEST ?= prozorro-sale-$(PROJECT_NAME):develop-test
 CI_COMMIT_SHORT_SHA ?= $(shell git rev-parse --short HEAD)
-GIT_STAMP ?= $(shell git describe)
+GIT_STAMP ?= $(shell git describe || echo v0.1.0)
 CHART_MUSEUM_URL ?= "https://helm.prozorro.sale/api/charts"
 
 # colors

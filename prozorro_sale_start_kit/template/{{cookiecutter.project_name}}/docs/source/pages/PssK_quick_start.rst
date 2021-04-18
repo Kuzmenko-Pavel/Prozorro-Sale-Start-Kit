@@ -1,5 +1,5 @@
 Quick start for Prozorro Sale Start Kit
-=======================
+=======================================
 
 To use `prozorro-sale-start-kit` you have to meet the next requirements:
 

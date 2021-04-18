@@ -13,9 +13,9 @@ stages:
 image: registry-gitlab.prozorro.sale/prozorro-sale/ci-build-box
 
 variables:
-  FULL_NAME_IMAGE: registry-gitlab.prozorro.sale/prozorro-sale/billing
-  IMAGE: prozorro-sale-billing:$CI_COMMIT_SHORT_SHA
-  IMAGE_TEST: prozorro-sale-billing:$CI_COMMIT_SHORT_SHA-test
+  FULL_NAME_IMAGE: registry-gitlab.prozorro.sale/prozorro-sale/{{cookiecutter.project_name}}
+  IMAGE: prozorro-sale-{{cookiecutter.project_name}}:$CI_COMMIT_SHORT_SHA
+  IMAGE_TEST: prozorro-sale-{{cookiecutter.project_name}}:$CI_COMMIT_SHORT_SHA-test
   PIPELINE_TRIGGER_URL: "https://gitlab.prozorro.sale/api/v4/projects/16/trigger/pipeline"
 
 code-style-check:
@@ -31,7 +31,7 @@ build-helm-package:
   extends: .build-helm-package-template
   artifacts:
     paths:
-      - prozorro-sale-billing-*.tgz
+      - prozorro-sale-{{cookiecutter.project_name}}-*.tgz
   only:
     - master
     - tags
@@ -115,5 +115,5 @@ deploy-demo:
   after_script:
     - kubectl config set-credentials prozorro.deploy --token=$RG_DEV_TOKEN
     - kubectl -n prozorro-dev apply -f demo-k8s.yaml
-    - kubectl -n prozorro-dev rollout restart deployment prozorro-dev-prozorro-sale-billing-demo
+    - kubectl -n prozorro-dev rollout restart deployment prozorro-dev-prozorro-sale-{{cookiecutter.project_name}}-demo
   when: manual

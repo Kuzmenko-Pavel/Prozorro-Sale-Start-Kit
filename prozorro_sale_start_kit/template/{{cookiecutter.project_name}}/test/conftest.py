@@ -5,8 +5,8 @@ from contextlib import contextmanager
 import pytest
 from aiotask_context import task_factory
 
-from prozorro_sale.{{ cookiecutter.underscore_project_name }}.databridge.main import create_databridge
-from prozorro_sale.{{ cookiecutter.underscore_project_name }}.main import create_app
+from prozorro_sale.{{cookiecutter.project_name | to_snake}}.databridge.main import create_databridge
+from prozorro_sale.{{cookiecutter.project_name | to_snake}}.api.main import create_app
 
 ROOT_FOLDER = pathlib.Path(__file__).parent.absolute().parent
 FIXTURE_PATH = ROOT_FOLDER.joinpath('fixtures')

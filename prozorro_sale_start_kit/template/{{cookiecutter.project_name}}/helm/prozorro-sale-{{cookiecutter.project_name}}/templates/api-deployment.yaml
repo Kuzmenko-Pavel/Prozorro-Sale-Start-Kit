@@ -2,19 +2,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "prozorro-sale.fullname" . }}
+  name: {{ include "prozorro-sale.fullname" . }}-api
   labels:
 {{ include "prozorro-sale.labels" . | indent 4 }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.api.replicaCount }}
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ include "prozorro-sale.name" . }}
+      app.kubernetes.io/name: {{ include "prozorro-sale.name" . }}-api
       app.kubernetes.io/instance: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: {{ include "prozorro-sale.name" . }}
+        app.kubernetes.io/name: {{ include "prozorro-sale.name" . }}-api
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
       {{- with .Values.imagePullSecrets }}
@@ -29,9 +29,10 @@ spec:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-{% endraw %}
-          command: [ 'python', '-m', 'prozorro_sale.{{cookiecutter.underscore_project_name}}' ]
-{% raw -%}
+          command:
+            {{- toYaml .Values.api.command | nindent 12  }}
+          args:
+            {{- toYaml .Values.api.args | nindent 12 }}
           ports:
             - name: http
               containerPort: 80
@@ -40,17 +41,23 @@ spec:
             httpGet:
               path: /api/ping
               port: http
-            initialDelaySeconds: 70
+            initialDelaySeconds: 15
           readinessProbe:
             httpGet:
               path: /api/ping
               port: http
-            initialDelaySeconds: 70
+            initialDelaySeconds: 15
           resources:
+          {{- if .Values.api.resources }}
+          {{- toYaml .Values.api.resources | nindent 12 }}
+          {{- else }}
           {{- toYaml .Values.resources | nindent 12 }}
+          {{- end }}
           env:
             - name: SWAGGER_DOC
               value: "{{.Values.swaggerDoc}}"
+            - name: SEARCH_URL
+              value: {{ .Release.Name }}-{{ .Values.searchUrl }}
           volumeMounts:
             - name: {{ .Release.Name }}-prozorro-sale-procedure-config
               mountPath: /config/

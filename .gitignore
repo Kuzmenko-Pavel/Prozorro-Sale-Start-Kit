@@ -107,6 +107,6 @@ venv.bak/
 
 # idea
 .idea/
-project_new/
+project-new/
 
 .vscode/
