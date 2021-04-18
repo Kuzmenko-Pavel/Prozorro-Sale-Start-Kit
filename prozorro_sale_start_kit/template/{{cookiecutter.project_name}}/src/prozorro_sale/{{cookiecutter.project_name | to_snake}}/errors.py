@@ -8,7 +8,7 @@ from prozorro_sale import tools  # type: ignore
 LOG = tools.logging.get_custom_logger(__name__)
 
 
-class BillingException(Exception):
+class {{cookiecutter.project_name | to_camel}}Exception(Exception):
     pass
 
 

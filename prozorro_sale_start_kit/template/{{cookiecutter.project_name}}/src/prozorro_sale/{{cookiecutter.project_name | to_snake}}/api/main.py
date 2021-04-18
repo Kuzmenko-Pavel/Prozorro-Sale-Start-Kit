@@ -1,9 +1,11 @@
 import asyncio
 import os
+import pathlib
 from typing import AsyncGenerator
 
 import uvloop
 from aiohttp import web
+from aiohttp_swagger import setup_swagger
 from aiotask_context import task_factory
 
 try:
@@ -18,11 +20,14 @@ except ImportError:
 
 import prozorro_sale  # noqa
 from prozorro_sale import tools  # type: ignore
-from prozorro_sale.{{ cookiecutter.project_name }}.main import on_startup
-from prozorro_sale.{{ cookiecutter.project_name }}.databridge.routes import init_routes
-from prozorro_sale.{{ cookiecutter.project_name }}.errors import request_errors_middleware
+from prozorro_sale.{{cookiecutter.project_name | to_snake}}.api.routes import init_routes
+from prozorro_sale.{{cookiecutter.project_name | to_snake}}.errors import request_errors_middleware
+
+ROOT_FOLDER = pathlib.Path(__file__).parent.absolute().parent.parent.parent
 
 LOG = tools.logging.get_custom_logger(__name__)
+
+SWAGGER_DOC_AVAILABLE = os.getenv('SWAGGER_DOC', False)
 
 
 async def all_start_stop_log(app: web.Application) -> AsyncGenerator[None, None]:
@@ -31,7 +36,11 @@ async def all_start_stop_log(app: web.Application) -> AsyncGenerator[None, None]
     LOG.info('Shutting down application')
 
 
-def create_databridge() -> web.Application:
+async def on_startup(app: web.Application) -> None:
+    LOG.info('Load config...')
+
+
+def create_app() -> web.Application:
     loop = asyncio.get_event_loop()
     loop.set_task_factory(task_factory)
     tools.logging.configure_logging()
@@ -43,6 +52,13 @@ def create_databridge() -> web.Application:
         loop=loop
     )
     init_routes(app)
+    if SWAGGER_DOC_AVAILABLE:
+        setup_swagger(
+            app,
+            title='Prozorro Sale Protocol Service',
+            api_version=prozorro_sale.version,
+            ui_version=3,
+        )
     app.on_startup.append(on_startup)
     app.cleanup_ctx.extend([
         all_start_stop_log
@@ -52,8 +68,8 @@ def create_databridge() -> web.Application:
 
 def main() -> None:
     uvloop.install()
-    app = create_databridge()
-    service_port = int(os.environ.get('DATABRIDGE_SERVICE_PORT', 80))
+    app = create_app()
+    service_port = int(os.environ.get('SERVICE_PORT', 80))
     web.run_app(app, port=service_port, access_log_class=tools.logging.CustomAccessLogger)
 
 

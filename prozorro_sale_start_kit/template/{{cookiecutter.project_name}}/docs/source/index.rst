@@ -1,5 +1,5 @@
 The tool that lets you bootstrap Prozorro Sale micro web service with best practices ready for development.
-====================================================================
+===========================================================================================================
 
 What is a `prozorro-sale-start-kit`? This project is designed to quickly and simply
 creating a web application based on `aiohttp` with use best practices.

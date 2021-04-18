@@ -8,8 +8,7 @@ import aiotask_context as context
 import prometheus_client
 
 from prozorro_sale import metrics, tools
-from prozorro_sale.{{ cookiecutter.underscore_project_name }} import db, utils, errors
-from prozorro_sale.{{ cookiecutter.underscore_project_name }}.models import dictionaries
+from prozorro_sale.{{cookiecutter.project_name | to_snake}} import db, utils, errors
 
 
 LOG = tools.logging.get_custom_logger(__name__)
@@ -75,6 +74,6 @@ def main() -> None:
     app_wrapper.add_coroutine(chronograph_loop(), stop_callback)
     app_wrapper.run_all()
 
+
 if __name__ == '__main__':
     main()
-

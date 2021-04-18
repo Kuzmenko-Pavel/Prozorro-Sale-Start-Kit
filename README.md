@@ -54,8 +54,6 @@ Then, navigate in your browser to `http://localhost:8080/`
 
 - [ ] Project Name
   
-- [ ] GitLab Projects link
-  
 - [ ] DataBase Support:
     - [ ] MongoDB
     - [ ] Redis
@@ -65,6 +63,7 @@ Then, navigate in your browser to `http://localhost:8080/`
     - [ ] Support DocString
   
 - [ ] Project architecture component :
+    - [ ] Api
     - [ ] DataBridge
     - [ ] Chronograph
 
@@ -86,6 +85,7 @@ Then, navigate in your browser to `http://localhost:8080/`
     - [ ] jinja2
   
 - [ ] CI/CD:
+    - [ ] Gitlab CI/CD
     - [ ] Distribute the project as a Python package
     - [ ] Docker Compose
     - [ ] HELM K8s
@@ -97,11 +97,11 @@ Then, navigate in your browser to `http://localhost:8080/`
 
 `prozorro-sale-start-kit` is a boilerplate for Prozorro Sale community. Feel free to make any
 suggestions on the issues or create a pull request. We will be very happy 😀.
-See [CONTRIBUTING.md](https://github.com/Kuzmenko-Pavel/Prozorro-Sale-Start-Kit/blob/main/CONTRIBUTING.md) for
+See [CONTRIBUTING.md](CONTRIBUTING.md) for
 more information about how to contribute to `prozorro-sale-start-kit`.
 
 ## License
 
 Prozorro Sale Start Kit is an open source
-software <a href="https://github.com/Kuzmenko-Pavel/Prozorro-Sale-Start-Kit/blob/main/LICENSE">available under the MIT
-license</a>.
+software [available under the MIT
+license](LICENSE).

@@ -1,7 +1,8 @@
+{% raw -%}
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "prozorro-sale.fullname" . }}
+  name: {{ include "prozorro-sale.fullname" . }}-api
   labels:
 {{ include "prozorro-sale.labels" . | indent 4 }}
 spec:
@@ -12,5 +13,6 @@ spec:
       protocol: TCP
       name: http
   selector:
-    app.kubernetes.io/name: {{ include "prozorro-sale.name" . }}
+    app.kubernetes.io/name: {{ include "prozorro-sale.name" . }}-api
     app.kubernetes.io/instance: {{ .Release.Name }}
+{% endraw %}

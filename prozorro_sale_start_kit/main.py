@@ -1,4 +1,6 @@
 import os
+import sys
+import argparse
 from functools import partial
 from pathlib import Path
 
@@ -10,7 +12,11 @@ from cookiecutter.exceptions import FailedHookException
 from cookiecutter.exceptions import OutputDirExistsException
 from cookiecutter.main import cookiecutter
 
-from prozorro_sale_start_kit.utils.validator import ProjectNameValidator
+from prozorro_sale_start_kit.utils.validator import ProjectNameValidator, ProjectLinkValidator
+from prozorro_sale_start_kit.utils.patch import py_inquirer_patch
+
+
+py_inquirer_patch()
 
 parent = Path(__file__).parent
 
@@ -41,10 +47,15 @@ def run(answers):
     kwargs = {
         "no_input": True,
         "extra_context": {
-            "project_name": answers.get("project_name"),
-            "underscore_project_name": answers.get("project_name").replace('-', '_')
+            "project_name": answers.pop("project_name", "project_new"),
+            "gitlab_link": answers.pop("gitlab_link", "https://github.com/Kuzmenko-Pavel/Prozorro-Sale-Start-Kit/"),
+            "use_sphinx": "y" if answers.get("use_sphinx", True) else "n",
         },
     }
+    for v in answers.values():
+        if isinstance(v, list):
+            for item in v:
+                kwargs["extra_context"][item] = "y"
 
     try:
         result = cookiecutter(template_path, **kwargs)
@@ -63,7 +74,11 @@ def run(answers):
     show_commands(folder)
 
 
-def main():
+def main(argv=None):
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--test', help='test project name')
+    args = parser.parse_args()
+    answers = {}
     questions = [
         {
             'type': 'input',
@@ -78,8 +93,8 @@ def main():
             'qmark': '⚙',
             'name': 'gitlab_link',
             'message': 'Enter link to you GitLab Projects',
-            'default': 'https://gitlab.prozorro.sale/prozorro-sale/....',
-            'validate': ProjectNameValidator
+            'default': 'https://github.com/Kuzmenko-Pavel/Prozorro-Sale-Start-Kit/',
+            'validate': ProjectLinkValidator
         },
         {
             'type': 'checkbox',
@@ -90,11 +105,13 @@ def main():
                 Separator('= The Database ='),
                 {
                     'name': 'You planning to use MongoDB',
-                    'value': 'use_mongo'
+                    'value': 'use_mongo',
+                    'checked': False
                 },
                 {
                     'name': 'You planning to use Redis',
-                    'value': 'use_redis'
+                    'value': 'use_redis',
+                    'checked': False
                 }
             ],
         },
@@ -107,11 +124,13 @@ def main():
                 Separator('= The Swagger ='),
                 {
                     'name': 'You planning to use Swagger',
-                    'value': 'use_swagger'
+                    'value': 'use_swagger',
+                    'checked': True
                 },
                 {
                     'name': 'You planning to generate Swagger from Yaml',
-                    'value': 'use_swagger_yaml'
+                    'value': 'use_swagger_yaml',
+                    'checked': False
                 },
             ],
         },
@@ -123,12 +142,19 @@ def main():
             'choices': [
                 Separator('= The Project architecture component ='),
                 {
+                    'name': 'You planning to use API',
+                    'value': 'use_api',
+                    'checked': True
+                },
+                {
                     'name': 'You planning to use DataBridge',
-                    'value': 'use_databridge'
+                    'value': 'use_databridge',
+                    'checked': False
                 },
                 {
                     'name': 'You planning to use Chronograph',
-                    'value': 'use_chronograph'
+                    'value': 'use_chronograph',
+                    'checked': False
                 },
             ],
         },
@@ -141,27 +167,33 @@ def main():
                 Separator('= The Prozorro Sale Python Packages ='),
                 {
                     'name': 'You planning to use prozorro-tools',
-                    'value': 'use_prozorro_tools'
+                    'value': 'use_prozorro_tools',
+                    'checked': True
                 },
                 {
                     'name': 'You planning to use schematics',
-                    'value': 'use_schematics'
+                    'value': 'use_schematics',
+                    'checked': False
                 },
                 {
                     'name': 'You planning to use prozorro-auth',
-                    'value': 'use_prozorro_auth'
+                    'value': 'use_prozorro_auth',
+                    'checked': False
                 },
                 {
                     'name': 'You planning to use prozorro-procedure',
-                    'value': 'use_prozorro_procedure'
+                    'value': 'use_prozorro_procedure',
+                    'checked': False
                 },
                 {
                     'name': 'You planning to use prozorro-mirror',
-                    'value': 'use_prozorro_mirror'
+                    'value': 'use_prozorro_mirror',
+                    'checked': False
                 },
                 {
                     'name': 'You planning to use prozorro-metrics',
-                    'value': 'use_prozorro_metrics'
+                    'value': 'use_prozorro_metrics',
+                    'checked': False
                 },
             ],
         },
@@ -174,31 +206,38 @@ def main():
                 Separator('= The Python Packages ='),
                 {
                     'name': 'You planning to use uvloop',
-                    'value': 'use_uvloop'
+                    'value': 'use_uvloop',
+                    'checked': True
                 },
                 {
                     'name': 'You planning to use PyYAML',
-                    'value': 'use_yaml'
+                    'value': 'use_yaml',
+                    'checked': False
                 },
                 {
                     'name': 'You planning to use orjson',
-                    'value': 'use_orjson'
+                    'value': 'use_orjson',
+                    'checked': False
                 },
                 {
                     'name': 'You planning to use python-box',
-                    'value': 'use_python_box'
+                    'value': 'use_python_box',
+                    'checked': False
                 },
                 {
                     'name': 'You planning to use trafaret',
-                    'value': 'use_trafaret'
+                    'value': 'use_trafaret',
+                    'checked': False
                 },
                 {
                     'name': 'You planning to use requests',
-                    'value': 'use_requests'
+                    'value': 'use_requests',
+                    'checked': False
                 },
                 {
                     'name': 'You planning to use jinja2 templates',
-                    'value': 'use_aiohttp_jinja2'
+                    'value': 'use_aiohttp_jinja2',
+                    'checked': False
                 }
 
             ],
@@ -212,19 +251,28 @@ def main():
                 Separator('= The CI/CD ='),
                 {
                     'name': 'You planning distribute the project as a Python package',
-                    'value': 'use_setup_py'
+                    'value': 'use_setup_py',
+                    'checked': False
+                },
+                {
+                    'name': 'You planning to use Gitlab CI/CD',
+                    'value': 'use_gitlab_ci',
+                    'checked': True
                 },
                 {
                     'name': 'You planning to use Docker Compose',
-                    'value': 'use_docker'
+                    'value': 'use_docker',
+                    'checked': True
                 },
                 {
                     'name': 'You planning to use HELM K8s',
-                    'value': 'use_helm'
+                    'value': 'use_helm',
+                    'checked': True
                 },
                 {
                     'name': 'You planning to Deploy Demo in K8s',
-                    'value': 'use_helm_demo'
+                    'value': 'use_helm_demo',
+                    'checked': True
                 }
             ],
         },
@@ -237,13 +285,16 @@ def main():
         }
     ]
     try:
-        answers = prompt(questions, true_color=True, patch_stdout=True, style=style)
+        if project_name := args.test:
+            answers['project_name'] = project_name
+        else:
+            answers.update(prompt(questions, true_color=True, patch_stdout=True, style=style))
     except AssertionError:
         echo('Run in terminal')
     else:
-        print(answers)
-        run(answers)
+        if answers:
+            run(answers)
 
 
 if __name__ == '__main__':
-    main()
+    main(sys.argv[1:])

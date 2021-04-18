@@ -6,28 +6,29 @@ checkrst:
 	@python -m pep517.build . && python -m twine check dist/*
 
 pyroma:
-	echo 'import setuptools; setuptools.setup()' > setup.py
-	pyroma -d .
-	rm setup.py
+	@echo 'import setuptools; setuptools.setup()' > setup.py
+	@pyroma -d .
+	@rm setup.py
 
 flake: checkrst bandit pyroma
 	@flake8 prozorro_sale_start_kit
 
 test:
-	rm -rf project_new/
-	pip install .
-	PssK --test project_new
-	doc8 project_new/docs/
-	cd project_new/ && make lint && make mypy && docker-compose up test && docker-compose stop
+	@rm -rf project-new/
+	@pip install .
+	@PssK --test project-new
+	@doc8 project-new/docs/
+	@cd project-new/ && make lint
 
 ci: flake test
 
 clean:
-	rm -rf .eggs
-	rm -rf build
-	rm -rf dist
-	rm -rf prozorro_sale_start_kit.egg-info
-	find . -type f -name "*.py[co]" -delete
-	find . -type d -name "__pycache__" -delete
+	@rm -rf .eggs
+	@rm -rf build
+	@rm -rf dist
+	@rm -rf prozorro_sale_start_kit.egg-info
+	@rm -rf project-new
+	@find . -type f -name "*.py[co]" -delete
+	@find . -type d -name "__pycache__" -delete
 
 .PHONY: all flake test vtest cov clean doc ci
