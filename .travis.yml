@@ -43,7 +43,7 @@ jobs:
         skip-cleanup: true
         password:
           # Encrypted with `travis encrypt -r Kuzmenko-Pavel/Prozorro-Sale-Start-Kit --api-endpoint 'https://api.travis-ci.com/'`:
-          secure: "VkidT4OfseeC46KTxjlmZGRljWzFGZKy6UlwWkRpWMDj7Ymz8WpxZbs0LgJZRbZSgzh5HZP00NlJTkCCtqvJbAfdAqiMQxwn32CebJFKlwoHm2jooAawiPwVtp1KWtZodsMb17mQurewF9d/g4yPfD+HmlceJCKuNigE2JC0zjJ+nEVHk/fhHHY1PEigT5upKJPliCeFt4mHOpgHXVQKZ4jqkhYTi+Rr3Cg8ZHPrT7Vr/Mjl/2qiZiGa8i9MRAtRuAd8LToYZ3bhDAH1KFCLDvNjKRTFaMo25vyump58eRlIaS8ERCsgR9e8LSPbQ7FurHOX+Fk8z8BElChdt4eZ8AxXbK+2fAqPQUrfagbusvWIO4xVw8UmlrLjwgAwT/U2jgX1desWkBgmU4vVk60Zq54CAKU7UCFGXDC8iY1WueTOncytHFIJw8ARWs4zPEOBLGhLm+aQmFAJ9T/uQJZ5WG/2omtKQ01UUFRPslsvIAZR/7bcBOK0RJbhEeaeyWRgf+CaLTCLBayvLeHmCNKBOjecmVfJ6T4Abarz8SGSP5Vt28sBEJV+uOro9Y+2pRCOf8rG7GfjfjDtkf6zLVIS5sgleasx4uoHU0ONh9fzGLcbrL5eY/cSs1kNhn93AeR93arT95ScgSy0OQlCiqbPf4xQGIKi/5IoWyKBBZ1DRZ8="
+          secure: "IK5C9IrMgdyWjcoAjHuXpblacK2CzM0wF86eYmghD8V1YJt0zNpp2sVJUvGXNizCofn98GFezz0uHLu2vWZLuIQauYp/rQtxJyfb9/Prw5Po97vNJWRW59XomvBpr+OLHLKa1/Yh2hcTOOVzwnr1jkMiDv5A2BNOAp8GLhsBvnG4jATsJTaw8DWKeKg4hiQyz6rnHV06xOoy4DHE81Bc/9wx5BzY3ZF/QP/KZVjayA+Nhz/eiPXoKUiV2ZVsXgSBrfJ/qB0dCh0t1YVjO86J6ubVUajIBRq7G7YQIFvpOOLuLjMXXkrLQZ6BHwaPz31EkrcUD0PTLqcZrv4GlF36yjM2+UQJ+QGOwqD2elUk87tvvASLZT19h9MZAhsDva3vF+NTBrLi9IsWU8hHNyP2ivbyoAr8VUV405ZhHrP9VjgFxXoEf+iN3P8DMKd/LFv98fmhmsZTt0mtNe2QYm2uWMf+CklC7SlqTXkisZqHbgfwnb/lFEDfOi5htb7/oX5RPFsvAKDGTuVCtS1ar3EgQyCgTGYGHU3Oabx2YQCqw+sXXivDYi3cR7TjUD42WviNhwVAcB2GnM+B9SCLPNK2FX1OjzYvTxsSn7vdRuJSvP+EoL6oW3BYnbJ+R69eUIqhMcZJ7XURcjxyR1jFW6TeqzMxwgjQv8IPxB3kUdl1GAE="
         on:
           all_branches: true
 
