@@ -32,3 +32,11 @@ clean:
 	@find . -type d -name "__pycache__" -delete
 
 .PHONY: all flake test vtest cov clean doc ci
+
+## Create tag
+version:
+	$(eval GIT_TAG ?= $(shell git describe --abbrev=0))
+	$(eval VERSION ?= $(shell read -p "Version: " VERSION; echo $$VERSION))
+	echo "Tagged release $(VERSION)\n" > Changelog-$(VERSION).txt
+	git log --oneline --no-decorate --no-merges $(GIT_TAG)..HEAD >> Changelog-$(VERSION).txt
+	git tag -a -e -F Changelog-$(VERSION).txt $(VERSION)
