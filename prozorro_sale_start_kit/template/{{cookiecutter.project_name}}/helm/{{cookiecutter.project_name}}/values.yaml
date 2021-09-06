@@ -1,0 +1,79 @@
+swaggerDoc: 1
+prometheus: false
+
+livenessProbe:
+  enabled: true
+  timeoutSeconds: 10
+  periodSeconds: 15
+  initialDelaySeconds: 1
+readinessProbe:
+  enabled: true
+  timeoutSeconds: 5
+  periodSeconds: 6
+  initialDelaySeconds: 1
+startupProbe:
+  enabled: true
+  failureThreshold: 3
+  periodSeconds: 5
+
+image:
+  repository: registry-gitlab.prozorro.sale/prozorro-sale/{{cookiecutter.gitlab_project_name}}
+
+imagePullSecrets: [ ]
+
+{% raw -%}
+env:
+  - name: SWAGGER_DOC
+    value: "{{.Values.swaggerDoc}}"
+
+volumes:
+  - name: "procedure-config"
+    configMap:
+      name: "{{ .Release.Name }}-procedure-config"
+
+{% endraw %}
+
+volumeMounts:
+  - name: "procedure-config"
+    mountPath: /config/
+
+resources:
+  limits:
+    cpu: 1200m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+## Applications variables definition
+{%- if cookiecutter.use_api == 'y' %}
+# Api Applications
+application:
+  api:
+    enabled: true
+    command:
+      - python
+    args:
+      - -m
+      - prozorro_sale.{{cookiecutter.project_name | to_snake}}.api
+{%- endif %}
+{%- if cookiecutter.use_databridge == 'y' %}
+  # Databridge Applications
+  databridge:
+    enabled: true
+    command:
+      - python
+    args:
+      - -m
+      - prozorro_sale.{{cookiecutter.project_name | to_snake}}.databridge
+{%- endif %}
+{%- if cookiecutter.use_chronograph == 'y' %}
+  # Chronograph Applications
+  chronograph:
+    enabled: true
+      command:
+        - python
+      args:
+        - -m
+        - prozorro_sale.{{cookiecutter.project_name | to_snake}}.chronograph
+{%- endif %}

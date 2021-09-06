@@ -6,7 +6,8 @@ from prozorro_sale_start_kit.template.hooks.constants import EXTENSIONS
 
 def remove_dirs_and_files(file_type) -> None:
     data_format = {
-        'underscore_project_name': '{{cookiecutter.project_name | to_snake}}'
+        'underscore_project_name': '{{cookiecutter.project_name | to_snake}}',
+        'project_name': '{{cookiecutter.project_name}}'
     }
     if extension := EXTENSIONS.get(file_type):
         for dir_name in extension.get('TEMPLATE_DIRS', []):
@@ -35,9 +36,11 @@ def main() -> None:
         ('prozorro_procedure', "{{ cookiecutter.use_prozorro_procedure | lower }}" == "n"),
         ('prozorro_mirror', "{{ cookiecutter.use_prozorro_mirror | lower }}" == "n"),
         ('prozorro_metrics', "{{ cookiecutter.use_prozorro_metrics | lower }}" == "n"),
+        ('use_dotenv', "{{ cookiecutter.use_dotenv | lower }}" == "n"),
         ('uvloop', "{{ cookiecutter.use_uvloop | lower }}" == "n"),
         ('yaml', "{{ cookiecutter.use_yaml | lower }}" == "n"),
         ('orjson', "{{ cookiecutter.use_orjson | lower }}" == "n"),
+        ('ujson', "{{ cookiecutter.use_ujson | lower }}" == "n"),
         ('python_box', "{{ cookiecutter.use_python_box | lower }}" == "n"),
         ('trafaret', "{{ cookiecutter.use_trafaret | lower }}" == "n"),
         ('requests', "{{ cookiecutter.use_requests | lower }}" == "n"),

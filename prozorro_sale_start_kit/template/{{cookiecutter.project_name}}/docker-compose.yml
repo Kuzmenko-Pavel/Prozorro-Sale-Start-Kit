@@ -16,17 +16,19 @@ services:
   {{cookiecutter.project_name}}-test-integration: &test_app
     <<: *base_app
     image: "${IMAGE_TEST}"
+    container_name: {{cookiecutter.project_name}}-test-integration
     environment:
-      SEARCH_URL: na
+      SWAGGER_DOC: 0
 
   {{cookiecutter.project_name}}-test-unit:
     <<: *test_app
+    container_name: {{cookiecutter.project_name}}-test-unit
 
-  {{cookiecutter.project_name}}-local:
+  {{cookiecutter.project_name}}-local: &local_app
     <<: *base_app
     tty: true
     command: adev runserver prozorro_sale/{{cookiecutter.project_name | to_snake}}/api
-    environment:
+    environment: &local_app_environment
       DEBUG: 1
       PYTHONUNBUFFERED: 1
       PYTHONASYNCIODEBUG: 1
@@ -38,3 +40,13 @@ services:
     restart: always
     ports:
       - 8080:8080
+
+  {{cookiecutter.project_name}}-databridge-local:
+    <<: *local_app
+    container_name: {{cookiecutter.project_name}}-databridge
+    command: adev runserver --app-factory=create_databridge prozorro_sale/{{cookiecutter.project_name | to_snake}}/databridge
+    environment:
+      <<: *local_app_environment
+      AIO_PORT: 8081
+    ports:
+      - 8081:8081

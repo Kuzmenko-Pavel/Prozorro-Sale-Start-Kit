@@ -3,6 +3,7 @@ import sys
 import argparse
 from functools import partial
 from pathlib import Path
+from urllib.parse import urlparse
 
 import click
 from PyInquirer import prompt, Separator
@@ -48,14 +49,31 @@ def run(answers):
         "no_input": True,
         "extra_context": {
             "project_name": answers.pop("project_name", "project_new"),
-            "gitlab_link": answers.pop("gitlab_link", "https://github.com/Kuzmenko-Pavel/Prozorro-Sale-Start-Kit/"),
             "use_sphinx": "y" if answers.get("use_sphinx", True) else "n",
         },
     }
-    for v in answers.values():
-        if isinstance(v, list):
-            for item in v:
+    gitlab_link = answers.pop("gitlab_link",
+                              f"https://gitlab.prozorro.sale/prozorro-sale/{kwargs['extra_context']['project_name']}/")
+    kwargs['extra_context']['gitlab_link'] = gitlab_link
+    gitlab_project_name = urlparse(gitlab_link).path.rstrip('/').rsplit('/')[-1]
+    if 'gitlab.prozorro.sale' not in gitlab_link:
+        gitlab_project_name = kwargs['extra_context']['project_name']
+    kwargs['extra_context']['gitlab_project_name'] = gitlab_project_name
+
+    for value in answers.values():
+        if isinstance(value, list):
+            for item in value:
                 kwargs["extra_context"][item] = "y"
+
+    if any([
+        kwargs["extra_context"].get('use_helm') == "y",
+        kwargs["extra_context"].get('use_helm_demo') == "y",
+        kwargs["extra_context"].get('use_setup_py') == "y"
+    ]):
+        kwargs["extra_context"]["use_docker"] = "y"
+
+    if kwargs["extra_context"].get('use_aiohttp_jinja2') == "y":
+        kwargs["extra_context"]["use_api"] = "y"
 
     try:
         result = cookiecutter(template_path, **kwargs)
@@ -215,6 +233,11 @@ def main(argv=None):
                     'checked': False
                 },
                 {
+                    'name': 'You planning to use ujson',
+                    'value': 'use_ujson',
+                    'checked': True
+                },
+                {
                     'name': 'You planning to use orjson',
                     'value': 'use_orjson',
                     'checked': False
@@ -287,6 +310,7 @@ def main(argv=None):
     try:
         if project_name := args.test:
             answers['project_name'] = project_name
+            answers['gitlab_link'] = f'https://gitlab.prozorro.sale/prozorro-sale/{project_name}/'
         else:
             answers.update(prompt(questions, true_color=True, patch_stdout=True, style=style))
     except AssertionError:

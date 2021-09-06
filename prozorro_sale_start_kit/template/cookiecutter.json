@@ -1,5 +1,6 @@
 {
     "project_name": "project_name",
+    "gitlab_project_name": "project_name",
     "gitlab_link": "asdads",
     "use_mongo": "y",
     "use_redis": "y",
@@ -14,9 +15,11 @@
     "use_prozorro_procedure": "y",
     "use_prozorro_mirror": "y",
     "use_prozorro_metrics": "y",
+    "use_dotenv": "y",
     "use_uvloop": "y",
     "use_yaml": "y",
     "use_orjson": "y",
+    "use_ujson": "y",
     "use_python_box": "y",
     "use_trafaret": "y",
     "use_requests": "y",
