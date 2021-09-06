@@ -1,0 +1,9 @@
+apiVersion: v2
+appVersion: "1.0"
+description: A {{cookiecutter.project_name}} Helm chart for Kubernetes
+name: {{cookiecutter.project_name}}
+version: 0.1.0
+dependencies:
+  - name: prozorro-helm-template-chart
+    version: v0.1.0
+    repository: https://helm.prozorro.sale

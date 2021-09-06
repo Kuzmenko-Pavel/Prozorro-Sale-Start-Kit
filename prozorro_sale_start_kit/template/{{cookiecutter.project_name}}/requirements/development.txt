@@ -1,11 +1,5 @@
 -r requirements.txt
--r test.txt
--r documentation.txt
-aiohttp-devtools==0.13.1
-aiohttp-debugtoolbar==0.6.0
-flake8
-safety
-bandit
-mypy
+aiohttp-devtools
+aiohttp-debugtoolbar
 
 

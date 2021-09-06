@@ -1,0 +1,4 @@
+{% raw -%}
+{{- $Context := dict "ArchitectComponent" "databridge" "Release" .Release "Chart" .Chart "Values" .Values.application.databridge  "Global" . -}}
+{{- include "prozorro-helm-template.base-http-app" $Context -}}
+{% endraw %}

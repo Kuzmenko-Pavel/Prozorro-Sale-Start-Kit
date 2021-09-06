@@ -1,0 +1,4 @@
+{% raw -%}
+{{- $Context := dict "ArchitectComponent" "chronograph" "Release" .Release "Chart" .Chart "Values" .Values.application.chronograph  "Global" . -}}
+{{- include "prozorro-helm-template.base-cli-app" $Context -}}
+{% endraw %}

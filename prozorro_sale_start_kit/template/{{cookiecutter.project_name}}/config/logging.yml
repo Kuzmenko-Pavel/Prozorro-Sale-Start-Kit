@@ -13,9 +13,12 @@ logging:
       stream: ext://sys.stdout
       filters:
         - requestid
+        - procedureid
   filters:
-    requestid: { }
+    requestid: {}
+    procedureid: {}
   formatters:
     default:
-      format: '[%(asctime)s.%(msecs)03dZ] | %(name)s | %(levelname)s - %(message)s | X-Request-ID: %(x_request_id)s'
+      class: 'prozorro_sale.tools.logger.LogFormatter'
+      format: '[%(asctime)s.%(msecs)03dZ] | %(name)s | %(levelname)s - %(message)s'
       datefmt: '%Y-%m-%dT%H:%M:%S'

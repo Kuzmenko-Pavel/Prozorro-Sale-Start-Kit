@@ -24,7 +24,8 @@ EXTENSIONS = {
             'src/prozorro_sale/{underscore_project_name}/api'
         ],
         'TEMPLATE_FILES': [
-            'test/integration/test_api.py'
+            'test/integration/test_api.py',
+            'helm/{project_name}/templates/api.yaml'
         ]
     },
     'databridge': {
@@ -32,7 +33,8 @@ EXTENSIONS = {
             'src/prozorro_sale/{underscore_project_name}/databridge'
         ],
         'TEMPLATE_FILES': [
-            'test/integration/test_databridge.py'
+            'test/integration/test_databridge.py',
+            'helm/{project_name}/templates/api.yaml'
         ]
     },
     'chronograph': {
@@ -40,6 +42,8 @@ EXTENSIONS = {
             'src/prozorro_sale/{underscore_project_name}/chronograph'
         ],
         'TEMPLATE_FILES': [
+            'test/integration/test_chronograph.py',
+            'helm/{project_name}/templates/chronograph.yaml'
         ]
     },
     'prozorro_tools': {
@@ -81,6 +85,10 @@ EXTENSIONS = {
         'TEMPLATE_DIRS': [],
         'TEMPLATE_FILES': []
     },
+    'ujson': {
+        'TEMPLATE_DIRS': [],
+        'TEMPLATE_FILES': []
+    },
     'python_box': {
         'TEMPLATE_DIRS': [],
         'TEMPLATE_FILES': []
@@ -94,7 +102,10 @@ EXTENSIONS = {
         'TEMPLATE_FILES': []
     },
     'aiohttp_jinja2': {
-        'TEMPLATE_DIRS': [],
+        'TEMPLATE_DIRS': [
+            'src/prozorro_sale/{underscore_project_name}/api/static',
+            'src/prozorro_sale/{underscore_project_name}/api/templates'
+        ],
         'TEMPLATE_FILES': []
     },
     'setup_py': {
@@ -139,6 +150,7 @@ EXTENSIONS = {
             'docs'
         ],
         'TEMPLATE_FILES': [
+            'requirements/documentation.txt'
         ]
     }
 }

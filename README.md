@@ -52,7 +52,9 @@ Then, navigate in your browser to `http://localhost:8080/`
 
 ## Options
 
-- [ ] Project Name
+- [x] Project Name
+  
+- [x] GitLab Projects link
   
 - [ ] DataBase Support:
     - [ ] MongoDB
@@ -62,34 +64,34 @@ Then, navigate in your browser to `http://localhost:8080/`
     - [ ] Support YAML file
     - [ ] Support DocString
   
-- [ ] Project architecture component :
-    - [ ] Api
-    - [ ] DataBridge
-    - [ ] Chronograph
+- [x] Project architecture component :
+    - [x] Api
+    - [x] DataBridge
+    - [x] Chronograph
 
-- [ ] Prozorro Sale Python Packages:
-    - [ ] prozorro-tools
-    - [ ] schematics
-    - [ ] prozorro-auth
-    - [ ] prozorro-procedure
-    - [ ] prozorro-mirror
-    - [ ] prozorro-metrics
+- [x] Prozorro Sale Python Packages:
+    - [x] prozorro-tools
+    - [x] schematics
+    - [x] prozorro-auth
+    - [x] prozorro-procedure
+    - [x] prozorro-mirror
+    - [x] prozorro-metrics
 
-- [ ] Python Packages:
-    - [ ] uvloop
-    - [ ] PyYAML
-    - [ ] orjson
-    - [ ] python-box
-    - [ ] trafaret
-    - [ ] requests
-    - [ ] jinja2
+- [x] Python Packages:
+    - [x] uvloop
+    - [x] PyYAML
+    - [x] orjson
+    - [x] python-box
+    - [x] trafaret
+    - [x] requests
+    - [x] jinja2
   
-- [ ] CI/CD:
-    - [ ] Gitlab CI/CD
-    - [ ] Distribute the project as a Python package
-    - [ ] Docker Compose
-    - [ ] HELM K8s
-    - [ ] Demo in K8s
+- [x] CI/CD:
+    - [x] Gitlab CI/CD
+    - [x] Distribute the project as a Python package
+    - [x] Docker Compose
+    - [x] HELM K8s
+    - [x] Demo in K8s
   
 - [ ] Use Sphinx for Project Doc
   

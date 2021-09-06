@@ -15,12 +15,20 @@ ARG version=unknown
 RUN echo $version && sed -i "s/##VERSION##/$version/g" prozorro_sale/__init__.py
 
 FROM prod as test
-COPY ["requirements/test.txt", "test", "./"]
+COPY requirements/test.txt .
+COPY test ./test
+COPY .flake8 /.flake8
+COPY .mypy.ini /.mypy.ini
 RUN pip install --no-cache-dir -r test.txt
 
+{% if cookiecutter.use_sphinx == 'y' %}
+FROM prod as doc
+COPY requirements/documentation.txt .
+RUN pip install --no-cache-dir -r documentation.txt
+{% endif %}
+
 FROM prod as local
-COPY ["requirements/development.txt", "requirements/test.txt", "requirements/documentation.txt", "./"]
-COPY [".flake8", ".mypy.ini", "/"]
+COPY requirements/development.txt .
 RUN pip install --no-cache-dir -r development.txt
 
 FROM prod

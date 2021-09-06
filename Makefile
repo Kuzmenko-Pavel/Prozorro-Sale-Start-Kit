@@ -18,7 +18,7 @@ test:
 	@pip install .
 	@PssK --test project-new
 	@doc8 project-new/docs/
-	@cd project-new/ && make lint
+	@cd project-new/ && $(MAKE) lint
 
 ci: flake test
 
