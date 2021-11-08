@@ -80,8 +80,8 @@ cleanup-test-images:
 deploy-dev:
   extends: .deploy-dev-kubernetes-template
 
-# --- DEMO JOBS ---
 {%- if cookiecutter.use_helm_demo == 'y' %}
+# --- DEMO JOBS ---
 deploy-demo:
   extends: .deploy-demo-kubernetes-template
   after_script:

@@ -1,22 +1,30 @@
+{%- if cookiecutter.use_prozorro_tools == 'n' %}
+import logging
+{%- endif %}
 import asyncio
 import os
 import uuid
-from datetime import datetime
 from time import time
 
+{%- if cookiecutter.use_prozorro_metrics == 'y' %}
 import prometheus_client
-
 from prozorro_sale import metrics
+{%- endif %}
+{%- if cookiecutter.use_prozorro_tools == 'y' %}
 from prozorro_sale.tools import logger
 from prozorro_sale.tools.logger import REQUEST_ID
+{%- endif %}
 
-
+{% if cookiecutter.use_prozorro_tools == 'y' %}
 LOG = logger.get_custom_logger(__name__)
+{%- endif %}
 KEEP_RUNNING = True
 # number of seconds to protect procedure from other workers
 PROCESSING_LOCK = os.getenv('PROCESSING_LOCK', 1)
+{%- if cookiecutter.use_prozorro_metrics == 'y' %}
 time_tick = prometheus_client.Summary('chronograph_tick_latency', 'Time to tick')
 obj_count = prometheus_client.Counter('chronograph_tick_count', 'Total processed object count')
+{%- endif %}
 
 
 def stop_callback(signum=None, frame=None):

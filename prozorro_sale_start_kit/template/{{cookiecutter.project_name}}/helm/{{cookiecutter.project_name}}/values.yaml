@@ -1,4 +1,6 @@
+{%- if (cookiecutter.use_swagger == 'y' or  cookiecutter.use_swagger_yaml == 'y') %}
 swaggerDoc: 1
+{%- endif %}
 prometheus: false
 
 livenessProbe:
@@ -21,11 +23,16 @@ image:
 
 imagePullSecrets: [ ]
 
-{% raw -%}
-env:
-  - name: SWAGGER_DOC
-    value: "{{.Values.swaggerDoc}}"
 
+env:
+  {%- if (cookiecutter.use_swagger == 'y' or  cookiecutter.use_swagger_yaml == 'y') %}
+  - name: SWAGGER_DOC
+    {% raw -%}
+    value: "{{.Values.swaggerDoc}}"
+    {% endraw %}
+  {%- endif %}
+
+{% raw -%}
 volumes:
   - name: "procedure-config"
     configMap:

@@ -1,4 +1,4 @@
-# Contributing to # {{ cookiecutter.project_name }}
+# Contributing to {{ cookiecutter.project_name | title }}
 
 If you open this file, it means that you want to help. Thank you for that 🤗 
 Here is how to do that.
@@ -11,19 +11,19 @@ Here is how to do that.
 4. Make pull request
 
 ```bash
-git clone https://github.com/Kuzmenko-Pavel/Prozorro-Sale-Start-Kit.git
-cd prozorro-sale-start-kit 
-pip install -r requirements-dev.txt
+git clone {{ cookiecutter.gitlab_link }}
+cd {{cookiecutter.gitlab_project_name}} 
+pip install -r requirements/development.txt
 
 make test
 
-cd project_new 
 make
-
+{%- if cookiecutter.use_api == 'y' %}
 open http://localhost:8080
+{%- endif %}
 ```
 
 ## Some possible ideas for the pull requests
 
- - [good first issue](https://github.com/Kuzmenko-Pavel/Prozorro-Sale-Start-Kit/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) - list of easy issues with description on what is have to be done
- - [documentation](https://github.com/Kuzmenko-Pavel/Prozorro-Sale-Start-Kit/wiki) - documentation needs to be continuously improved 🧐
+ - [good first issue]({{ cookiecutter.gitlab_link }}/-/issues) - list of easy issues with description on what is have to be done
+ - [documentation]({{ cookiecutter.gitlab_link }}/-/wikis/home) - documentation needs to be continuously improved 🧐

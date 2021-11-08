@@ -1,4 +1,3 @@
-import asyncio
 import pathlib
 from contextlib import contextmanager
 
@@ -9,6 +8,7 @@ from prozorro_sale.{{cookiecutter.project_name | to_snake}}.api.main import crea
 
 ROOT_FOLDER = pathlib.Path(__file__).parent.absolute().parent
 FIXTURE_PATH = ROOT_FOLDER.joinpath('fixtures')
+
 
 @pytest.fixture
 async def client(aiohttp_client, loop):

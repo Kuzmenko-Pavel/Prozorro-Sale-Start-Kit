@@ -1,6 +1,7 @@
 import os
 import sys
 import argparse
+import json
 from functools import partial
 from pathlib import Path
 from urllib.parse import urlparse
@@ -44,11 +45,14 @@ def show_commands(folder):
 
 
 def run(answers):
-    template_path = str(parent / "template")
+    default_config = {}
+    make_test = answers.get("make_test", False)
+    template_path = parent.joinpath("template")
+
     kwargs = {
         "no_input": True,
         "extra_context": {
-            "project_name": answers.pop("project_name", "project_new"),
+            "project_name": answers.pop("project_name", "project_new").lower(),
             "use_sphinx": "y" if answers.get("use_sphinx", True) else "n",
         },
     }
@@ -75,8 +79,16 @@ def run(answers):
     if kwargs["extra_context"].get('use_aiohttp_jinja2') == "y":
         kwargs["extra_context"]["use_api"] = "y"
 
+    with open(template_path.joinpath('cookiecutter.json')) as file:
+        default_config = json.load(file)
+
+    for key in default_config:
+        if key in kwargs["extra_context"] or key.startswith('_'):
+            continue
+        kwargs["extra_context"][key] = "n" if not make_test else "y"
+
     try:
-        result = cookiecutter(template_path, **kwargs)
+        result = cookiecutter(str(template_path), **kwargs)
     except (FailedHookException, OutputDirExistsException) as exc:
         if isinstance(exc, OutputDirExistsException):
             echo(
@@ -228,6 +240,11 @@ def main(argv=None):
                     'checked': True
                 },
                 {
+                    'name': 'You planning to use python-dotenv',
+                    'value': 'use_dotenv',
+                    'checked': False
+                },
+                {
                     'name': 'You planning to use PyYAML',
                     'value': 'use_yaml',
                     'checked': False
@@ -311,6 +328,7 @@ def main(argv=None):
         if project_name := args.test:
             answers['project_name'] = project_name
             answers['gitlab_link'] = f'https://gitlab.prozorro.sale/prozorro-sale/{project_name}/'
+            answers['make_test'] = True
         else:
             answers.update(prompt(questions, true_color=True, patch_stdout=True, style=style))
     except AssertionError:
