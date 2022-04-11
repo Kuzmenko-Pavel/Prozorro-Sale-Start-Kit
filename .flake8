@@ -1,3 +1,4 @@
 [flake8]
 max-line-length = 120
-exclude = .git,__pycache__,docs/source/conf.py,build,dist,prozorro_sale_start_kit/template
+exclude = .git,__pycache__, docs/source/conf.py, build, dist, prozorro_sale_start_kit/template/
+ignore = D

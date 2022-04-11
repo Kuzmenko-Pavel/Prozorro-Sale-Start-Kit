@@ -51,6 +51,8 @@ EXTENSIONS = {
             'config'
         ],
         'TEMPLATE_FILES': [
+            'src/prozorro_sale/{underscore_project_name}/environment.py'
+            'test/unit/test_environment.py'
         ]
     },
     'schematics': {

@@ -6,7 +6,7 @@ python-dotenv
 PyYAML
 {%- endif %}
 aiohttp[speedups]
-{%- if cookiecutter.use_swagger == 'y' %}
+{%- if (cookiecutter.use_swagger == 'y' or  cookiecutter.use_swagger_yaml == 'y') %}
 prozorro_aiohttp_swagger
 {%- endif %}
 {%- if cookiecutter.use_uvloop == 'y' %}
@@ -41,7 +41,7 @@ prozorro-tools
 prozorro-auth
 {%- endif %}
 {%- if cookiecutter.use_prozorro_procedure == 'y' %}
-prozorro-procedure>=3.42
+prozorro-procedure
 {%- endif %}
 {%- if cookiecutter.use_prozorro_mirror == 'y' %}
 prozorro-mirror

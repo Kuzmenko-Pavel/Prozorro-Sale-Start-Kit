@@ -1,4 +1,4 @@
-# {{ cookiecutter.project_name }}
+# {{ cookiecutter.project_name | title }}
 
 ___
 
@@ -17,11 +17,16 @@ For setup local env, create py.env file:
 
 ```
 {
-        echo 'SERVICE_PORT=8080'
-        echo 'DATABRIDGE_SERVICE_PORT=8081'
-        echo 'SEARCH_URL=procedure-dev.prozori.in.ua'
+{%- if cookiecutter.use_api == 'y' %}
+        echo 'API_PORT=8080'
+{%- endif %}
+{%- if cookiecutter.use_databridge == 'y' %}
+        echo 'DATABRIDGE_PORT=8081'
+{%- endif %}
         echo 'PYTHONASYNCIODEBUG=1'
+{%- if (cookiecutter.use_swagger == 'y' or  cookiecutter.use_swagger_yaml == 'y') %}
         echo 'SWAGGER_DOC=1'
+{%- endif %}
 } > py.env
 ```
 

@@ -16,9 +16,9 @@ flake: checkrst bandit pyroma
 test:
 	@rm -rf project-new/
 	@pip install .
-	@PssK --test project-new
+	@PssK --test Project-New
 	@doc8 project-new/docs/
-	@cd project-new/ && $(MAKE) lint
+	@cd project-new/ && $(MAKE) lint test-integration test-unit
 
 ci: flake test
 
